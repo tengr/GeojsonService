@@ -1,4 +1,5 @@
 require 'open-uri'
+require 'json'
 
 class ConvertController < ApplicationController
 	def index
@@ -14,8 +15,27 @@ class ConvertController < ApplicationController
 		tlatdec = params[:tlatdec].to_s
 		tlon = params[:tlon].to_s
 		tlondec = params[:tlondec].to_s
-		url = "http://www.yournavigation.org/api/1.0/gosmore.php?format=geojson" + "&flat=" + flat + "." + flatdec + "&flon=#{flon}" + ".#{flondec}" + "&tlat=#{tlat}" + ".#{tlatdec}" + "&tlon=#{tlat}" + ".#{tlondec}" + "&v=motorcar&fast=1&layer=mapnik"
+		url = "http://www.yournavigation.org/api/1.0/gosmore.php?format=geojson" \
+		+ "&flat=" + flat + "." + flatdec + "&flon=" + flon + "." + flondec \
+		+ "&tlat=" + tlat + "." + tlatdec + "&tlon=" + tlon + "." + tlondec \
+		+ "&v=motorcar&fast=1&layer=mapnik"
 		content = open(url).read
-		render text: content
+		coordinates = JSON.parse(content)['coordinates']
+		type = JSON.parse(content)['type']
+
+		"-------------"
+		puts flat
+		puts flatdec
+		puts url
+		"-------------"
+
+		geojson = "{\"type\":\"FeatureCollection\",
+		\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"urn:ogc:def:crs:OGC:1.3:CRS84\"}},
+		\"features\":[{\"type\":\"Feature\",\"properties\":{},
+		\"geometry\":{\"type\":\"LineString\",\"coordinates\":\"" + coordinates.to_s + "}}]}"
+
+
+
+		render text: geojson
 	end
 end
