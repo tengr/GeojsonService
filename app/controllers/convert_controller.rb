@@ -16,8 +16,8 @@ class ConvertController < ApplicationController
 		tlon = params[:tlon].to_s
 		tlondec = params[:tlondec].to_s
 		url = "http://www.yournavigation.org/api/1.0/gosmore.php?format=geojson" \
-		+ "&flat=" + flat + "." + flatdec + "&flon=" + flon + "." + flondec \
-		+ "&tlat=" + tlat + "." + tlatdec + "&tlon=" + tlon + "." + tlondec \
+		+ "&flat=" + "-" + flat + "." + flatdec + "&flon=" + flon + "." + flondec \
+		+ "&tlat=" + "-" + tlat + "." + tlatdec + "&tlon=" + tlon + "." + tlondec \
 		+ "&v=motorcar&fast=1&layer=mapnik"
 		content = open(url).read
 		coordinates = JSON.parse(content)['coordinates']
@@ -27,15 +27,17 @@ class ConvertController < ApplicationController
 		puts flat
 		puts flatdec
 		puts url
+		puts coordinates.to_s
 		"-------------"
 
 		geojson = "{\"type\":\"FeatureCollection\",
 		\"crs\":{\"type\":\"name\",\"properties\":{\"name\":\"urn:ogc:def:crs:OGC:1.3:CRS84\"}},
 		\"features\":[{\"type\":\"Feature\",\"properties\":{},
-		\"geometry\":{\"type\":\"LineString\",\"coordinates\":\"" + coordinates.to_s + "}}]}"
+		\"geometry\":{\"type\":\"LineString\",\"coordinates\":" + coordinates.to_s + "}}]}"
 
-
+		test = open("https://raw.githubusercontent.com/tengr/HelloOSM/master/convert.json").read
 
 		render text: geojson
+
 	end
 end
