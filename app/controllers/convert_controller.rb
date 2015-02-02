@@ -42,10 +42,8 @@ class ConvertController < ApplicationController
 	end
 
 	def parse
-		params_string = params[:qs]
-		url = "http://www.yournavigation.org/api/1.0/gosmore.php?format=geojson&" \
-		+ params_string\
-		+ "&v=motorcar&fast=1&layer=mapnik"
+		params_string = params[:qs].to_s
+		url = "http://www.yournavigation.org/api/1.0/gosmore.php?format=geojson&" + params_string + "&v=motorcar&fast=1&layer=mapnik"
 
 		content = open(url).read
 		coordinates = JSON.parse(content)['coordinates']
@@ -57,6 +55,15 @@ class ConvertController < ApplicationController
 		\"features\":[{\"type\":\"Feature\",\"properties\":{},
 		\"geometry\":{\"type\":\"LineString\",\"coordinates\":" + coordinates.to_s + "}}]}"
 
-		render text: geojson
+		puts "+++++++++++++++++++++++"
+		puts url
+		puts "++++++++++++++++++++++"
+
+		render text: content
 	end
+
+	def test
+		render text: params[:params].to_s
+	end
+
 end

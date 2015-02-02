@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get 'convert', to: 'convert#index'
   get 'convert/:flat/:flatdec/:flon/:flondec/:tlat/:tolatdec/:tlon/:tlondec', to: 'convert#trans'
   get 'parse/:qs', to:'convert#parse'
+  get 'test/:params', to:'convert#test'
 
 
 
