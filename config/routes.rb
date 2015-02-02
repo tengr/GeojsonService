@@ -11,6 +11,8 @@ Rails.application.routes.draw do
 
   get 'convert', to: 'convert#index'
   get 'convert/:flat/:flatdec/:flon/:flondec/:tlat/:tolatdec/:tlon/:tlondec', to: 'convert#trans'
+  get 'parse/:qs', to:'convert#parse'
+
 
 
   # Example of named route that can be invoked with purchase_url(id: product.id)
